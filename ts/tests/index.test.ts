@@ -1,4 +1,52 @@
-import {KrBcrypt, KrHash, KrHashAlgorithm, KrRSA, KrRSAKeyPair} from "../index";
+import {KrBcrypt, KrHash, KrHashAlgorithm, KrRSA, KrRSAKeyPair, KrCipher} from "../index";
+
+describe("KrCipher", (): void => {
+
+	test("Instance", (): void => {
+
+		const cipher: KrCipher = new KrCipher(Buffer.from("alpine"));
+		expect(cipher).toBeDefined();
+
+		const msg: string = "Hello, world!";
+		const msgData: Buffer = Buffer.from(msg);
+		const encryptedData: Buffer = cipher.encrypt(msgData);
+		expect(encryptedData).not.toEqual(msgData);
+		const decryptedData: Buffer = cipher.decrypt(encryptedData);
+		expect(decryptedData).toEqual(msgData);
+
+
+	});
+
+	test("Static", (): void => {
+
+		const msg: string = "Hello, world!";
+		const password: string = "alpine";
+		const msgData: Buffer = Buffer.from(msg);
+		const passwordData: Buffer = Buffer.from(password);
+		const saltData: Buffer = Buffer.from("32ruh2ifuhwefiuh2fiuwehfliukwefhlwiufhwlekfuhjwelkfjhwe");
+
+		const encryptedData: Buffer = KrCipher.encrypt(msgData, passwordData, saltData);
+		expect(encryptedData).not.toEqual(msgData);
+		const decryptedData: Buffer = KrCipher.decrypt(encryptedData, passwordData, saltData);
+		expect(decryptedData).toEqual(msgData);
+
+	});
+
+	test("Static Without Salt", (): void => {
+
+		const msg: string = "Hello, world!";
+		const password: string = "alpine";
+		const msgData: Buffer = Buffer.from(msg);
+		const passwordData: Buffer = Buffer.from(password);
+
+		const encryptedData: Buffer = KrCipher.encrypt(msgData, passwordData);
+		expect(encryptedData).not.toEqual(msgData);
+		const decryptedData: Buffer = KrCipher.decrypt(encryptedData, passwordData);
+		expect(decryptedData).toEqual(msgData);
+
+	});
+
+});
 
 describe("KrBcrypt", (): void => {
 

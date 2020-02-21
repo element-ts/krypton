@@ -35,6 +35,21 @@ hasher.append(Buffer.from("World"));
 const hashedData: Buffer = hasher.hash();
 ```
 
+### `KrCipher`
+```typescript
+// instance
+const cipher: KrCipher = new KrCipher(Buffer.from("password"));
+const msg: Buffer = Buffer.from("Hello, world!");
+const encryptedData: Buffer = cipher.encrypt(msg);
+const decryptedData: Buffer = cipher.decrypt(encryptedData);
+console.log(msg === decryptedData);
+
+// static
+const encryptedData: Buffer = KrCipher.encrypt(Buffer.from("Hello, world!"), Buffer.from("password"), Buffer.from("the-salt"));
+const decryptedData: Buffer = KrCipher.decrypt(encryptedData, Buffer.from("password"), Buffer.from("the-salt"));
+
+```
+
 ### `KrRSA`
 ```typescript
 
