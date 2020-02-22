@@ -232,5 +232,23 @@ describe("KrRSA", (): void => {
 
 	});
 
+	test("Sign and Verify", (): void => {
+
+		const passphrase: string = "password";
+		const keys: KrRSAKeyPair = KrRSA.generateKeys(undefined, passphrase);
+		const message: string = "Hello, world!";
+		const dataToBeSigned: Buffer = Buffer.from(message);
+		const signedData: Buffer = KrRSA.sign(dataToBeSigned, keys.privateKey, passphrase);
+		expect(signedData).toBeDefined();
+		expect(signedData).not.toEqual(dataToBeSigned);
+		const verifiedData: Buffer = KrRSA.verify(signedData, keys.publicKey);
+		expect(verifiedData).toBeDefined();
+		expect(verifiedData).not.toEqual(signedData);
+		expect(verifiedData).toEqual(dataToBeSigned);
+		const verifiedMessage: string = verifiedData.toString("utf8");
+		expect(verifiedMessage).toEqual(message);
+
+	});
+
 
 });

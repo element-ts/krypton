@@ -42,4 +42,19 @@ export class KrRSA {
 
 	}
 
+	public static sign(data: Buffer, privateKey: Buffer, passphrase: string = ""): Buffer {
+
+		return Crypto.privateEncrypt({
+			key: privateKey,
+			passphrase
+		}, data);
+
+	}
+
+	public static verify(data: Buffer, publicKey: Buffer): Buffer {
+
+		return Crypto.publicDecrypt(publicKey, data);
+
+	}
+
 }
