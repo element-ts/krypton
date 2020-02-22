@@ -1,4 +1,6 @@
 import {KrBcrypt, KrHash, KrHashAlgorithm, KrRSA, KrRSAKeyPair, KrCipher} from "../index";
+import {KrBcryptCreatePasswordReturn} from "../KrBcrypt";
+import has = Reflect.has;
 
 describe("KrCipher", (): void => {
 
@@ -52,29 +54,32 @@ describe("KrBcrypt", (): void => {
 
 	test("Create Password via String", async (): Promise<void> => {
 
-		const password: Buffer = await KrBcrypt.createPassword("password");
+		const res: KrBcryptCreatePasswordReturn = await KrBcrypt.createPassword("password");
 
-		expect(password).toBeDefined();
+		expect(res.password).toBeDefined();
+		expect(res.salt).toBeDefined();
 
 	});
 
 	test("Create Password via Buffer", async (): Promise<void> => {
 
 		const data: Buffer = Buffer.from("password");
-		const password: Buffer = await KrBcrypt.createPassword(data);
+		const hash: KrBcryptCreatePasswordReturn = await KrBcrypt.createPassword(data);
 
-		expect(password).toBeDefined();
+		expect(hash.password).toBeDefined();
+		expect(hash.salt).toBeDefined();
 
 	});
 
 	test("Verify Password via String", async (): Promise<void> => {
 
 		const password: string = "password";
-		const createdPassword: Buffer = await KrBcrypt.createPassword(password);
-		const checkPassword: boolean = await KrBcrypt.verifyPassword(password, createdPassword);
-		const failPassword: boolean = await KrBcrypt.verifyPassword(password + "FAIL!", createdPassword);
+		const hash: KrBcryptCreatePasswordReturn = await KrBcrypt.createPassword(password);
+		const checkPassword: boolean = await KrBcrypt.verifyPassword(password, hash.password, hash.salt);
+		const failPassword: boolean = await KrBcrypt.verifyPassword(password + "FAIL!", hash.password, hash.salt);
 
-		expect(createdPassword).toBeDefined();
+		expect(hash.salt).toBeDefined();
+		expect(hash.password).toBeDefined();
 		expect(checkPassword).toEqual(true);
 		expect(failPassword).toEqual(false);
 
@@ -84,11 +89,12 @@ describe("KrBcrypt", (): void => {
 
 		const password: string = "password";
 		const passwordData: Buffer = Buffer.from(password);
-		const createdPassword: Buffer = await KrBcrypt.createPassword(passwordData);
-		const checkPassword: boolean = await KrBcrypt.verifyPassword(passwordData, createdPassword);
-		const failPassword: boolean = await KrBcrypt.verifyPassword(Buffer.from(password + "FAIL!"), createdPassword);
+		const hash: KrBcryptCreatePasswordReturn = await KrBcrypt.createPassword(passwordData);
+		const checkPassword: boolean = await KrBcrypt.verifyPassword(passwordData, hash.password, hash.salt);
+		const failPassword: boolean = await KrBcrypt.verifyPassword(Buffer.from(password + "FAIL!"), hash.password, hash.salt);
 
-		expect(createdPassword).toBeDefined();
+		expect(hash.salt).toBeDefined();
+		expect(hash.password).toBeDefined();
 		expect(checkPassword).toEqual(true);
 		expect(failPassword).toEqual(false);
 
