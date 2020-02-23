@@ -26,7 +26,7 @@ export class KrBcrypt {
 		const hash: string = await Bcrypt.hash(rawPassword, salt.toString("utf8"));
 		const hashData: Buffer = Buffer.from(hash, "utf8");
 
-		return password.equals(hashData);
+		return password.compare(hashData) === 0;
 
 	}
 
