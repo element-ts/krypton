@@ -51,7 +51,7 @@
 			true,
 			"match-declaration-order"
 		],
-		"only-arrow-functions": true,
+		"only-arrow-functions": false,
 		"prefer-const": true,
 		"quotemark": [
 			true,
@@ -71,7 +71,7 @@
 			"allow-undefined-check"
 		],
 		"typedef": [
-			true,
+			false,
 			"call-signature",
 			"arrow-call-signature",
 			"parameter",
