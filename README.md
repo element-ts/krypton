@@ -52,7 +52,6 @@ const decryptedData: Buffer = KrCipher.decrypt(encryptedData, Buffer.from("passw
 
 ### `KrRSA`
 ```typescript
-
 const keys: KrRSAKeyPair = KrRSA.generateKeys();
 
 const message: string = "Hello, world!";
@@ -61,6 +60,15 @@ const dataEncrypted: Buffer = KrRSA.encrypt(dataUnEncrypted, keys.publicKey);
 const dataDecrypted: Buffer = KrRSA.decrypt(dataEncrypted, keys.privateKey);
 
 const messageDecrypted: string = dataDecrypted.toString("utf8");
+```
+
+### `KrJWT`
+[https://jwt.io/]()
+```typescript
+const secret: Buffer = Buffer.from("my-256-bit-secret");
+
+const jwt: string = KrJWT.sign({foo: 1, bar: "Hello, world!"}, secret);
+const body: object | undefined = KrJWT.verify(jwt, secret);
 ```
 
 ## Documentation
