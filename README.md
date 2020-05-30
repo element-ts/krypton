@@ -63,7 +63,7 @@ const messageDecrypted: string = dataDecrypted.toString("utf8");
 ```
 
 ### `KrJWT`
-[https://jwt.io/]()
+Read about JSON web tokens at [jwt.io](https://jwt.io/).
 ```typescript
 const secret: Buffer = Buffer.from("my-256-bit-secret");
 
