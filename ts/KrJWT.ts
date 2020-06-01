@@ -7,11 +7,11 @@
 
 import * as Crypto from "crypto";
 
-export class KrJWT {
+export class KrJWT<T extends object> {
 
-	private readonly _payload: object;
+	private readonly _payload: T;
 
-	private constructor(payload: object) {
+	private constructor(payload: T) {
 
 		this._payload = payload;
 
@@ -39,7 +39,7 @@ export class KrJWT {
 			.replace(RegExp("/", "g"), "_");
 	}
 
-	private static decodePayload(value: string): object {
+	private static decodePayload<T>(value: string): T {
 		const base64 = value
 			.replace(RegExp("-", "g"), "+")
 			.replace(RegExp("_", "g"), "/");
@@ -52,9 +52,9 @@ export class KrJWT {
 		return this.encode(Crypto.createHmac("sha256", secret, {}).update(Buffer.from(`${header}.${payload}`)).digest().toString("base64"));
 	}
 
-	public static sign(value: object, secret: Buffer): string {
+	public static sign<T extends object>(value: T, secret: Buffer): string {
 
-		const jwt = new KrJWT(value);
+		const jwt = new KrJWT<T>(value);
 		const header = jwt.getHeader();
 		const payload = jwt.getPayload();
 		const sig = KrJWT.getSignature(header, payload, secret);
@@ -62,7 +62,7 @@ export class KrJWT {
 
 	}
 
-	public static verify(token: string, secret: Buffer): object | undefined {
+	public static verify<T extends object>(token: string, secret: Buffer): T | undefined {
 
 		const sections = token.split(".");
 		if (sections.length !== 3) return undefined;
